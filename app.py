@@ -3,7 +3,7 @@ from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.vectorstores import FAISS
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.prompts import PromptTemplate
-from dotenv import load_dotenv
+
 import os
 
 embeddings = HuggingFaceEmbeddings(
@@ -12,13 +12,15 @@ embeddings = HuggingFaceEmbeddings(
         encode_kwargs={'normalize_embeddings': True}
     )
 
-# Load environment variables from the .env file
-load_dotenv()
 
-# Access the API key
-api_key = os.getenv("GEMINI_API_KEY")
 
-# Use the API key in the Gemini AI initialization
+# Fetch the API key from the environment
+api_key = os.getenv("GOOGLE_API_KEY")
+
+if not api_key:
+    raise EnvironmentError("Missing `GOOGLE_API_KEY` environment variable. Please set it in the environment.")
+
+# Use the API key in your initialization
 llm = ChatGoogleGenerativeAI(
     model="gemini-1.5-pro",
     temperature=0.1,
